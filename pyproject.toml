@@ -1,0 +1,27 @@
+[project]
+name = "finance"
+version = "0.1.0"
+description = "finance using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "alpha-vantage>=3.0.0",
+    "crewai[tools]>=0.201.1,<1.0.0",
+    "google-api-python-client>=2.184.0",
+    "sec-edgar-downloader>=5.0.3",
+    "yfinance>=0.2.66",
+]
+
+[project.scripts]
+finance = "finance.main:run"
+run_crew = "finance.main:run"
+train = "finance.main:train"
+replay = "finance.main:replay"
+test = "finance.main:test"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"

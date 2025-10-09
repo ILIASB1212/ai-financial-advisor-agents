@@ -1,0 +1,129 @@
+client_profile_task:
+  description: >
+    Analyze the provided client intake data for the stated **Investment Goal:** . 
+    that contain client budget, timeline, risk tolerance, and sector preferencesand investment strategy.
+  expected_output: >
+    A single, complete **JSON object** (no prose before or after) containing the client's verified profile data. The document must include the following mandatory keys:
+    1.  **client_budget** (string)
+    2.  **timeline_in_years** (int)
+    3.  **risk_tolerance** 
+    4.  **sector_preferencesand** 
+    5.  **investment_strategy** 
+    
+  agent: Client_Profiler
+
+market_research_task:
+  description: >
+    Your mission is to leverage the full, structured **Client Profile Summary** JSON (received from the Client Profiler) to conduct a targeted, actionable market and sector analysis. This analysis must bridge the client's financial goals with current market realities.
+    Your core objective is to identify and analyze the **most suitable equity sectors** that logically support the client's defined **primary_goal_type**, **verified_risk_tolerance_score**, and any specific **strategy_preference** or **implicit_constraints**.
+    Your specific, mandatory process steps are:
+
+    1.  **Sector Identification and Justification:**
+        * **Primary Filter:** Scrutinize the `goal_categorization` (e.g., 'Aggressive Wealth Accumulation', 'Dividend Stock Focus', and so on) and `nlp_summary` (for implicit sector needs'). Identify and select **select  most relevant GICS sectors**.
+        * **Risk-Based Fallback:** If sector preference is ambiguous, use the **`verified_risk_tolerance_score`** and `timeline_years` to justify the selection. (e.g., High Risk/Long Timeline = Growth Sectors; Low Risk/Short Timeline = Defensive/Value Sectors). **The justification for sector choice must be explicit in your notes.**
+
+    2.  **Deep Market & Company Intelligence Gathering :**
+        * **Quantitative Metrics :** For each identified sector, gather and report key current performance indicators, including **Year-to-Date (YTD) Return**, the sector's **Forward P/E Ratio**, and the **Volatility Index (Beta)** relative to the S\&P 500.
+        * **Qualitative Drivers :** Conduct targeted searches for **major recent news events** (past 180 days), regulatory changes, and significant macro trends (e.g., inflation impact, supply chain shifts,.....) that are currently driving the sector's valuation.
+
+    3.  **Synthesized Market Outlook and Risk Assessment:**
+        * Based on the quantitative data and qualitative drivers, generate a comprehensive **6-Month Market Outlook** for each sector. This outlook must include potential **upside/downside scenarios** and a final, clear **Sentiment Rating** (BULLISH/BEARISH/NEUTRAL).
+        * Identify and articulate the primary **risk factor** disclosed in the client profile (from the `nlp_summary` or `implicit_constraints`) and analyze how the chosen sectors mitigate or amplify that specific risk.
+  expected_output: >
+    A comprehensive, professional **Targeted Sector Research Brief** structured for immediate use by the Investment Strategist. The output must be formatted with clear headings, adhering strictly to the following two sections:
+    1.  **Client-Sector Alignment Summary:** A concise, opening paragraph that clearly states the 2-3 chosen sectors, explicitly justifies the selection based on the client's profile data, and provides the overall weighted market sentiment (BULLISH/BEARISH/NEUTRAL) across all selected sectors.
+    2.  **Sector Deep Dive (Mandatory for Each Chosen Sector):** A dedicated, detailed paragraph for *each* identified sector. This paragraph must integrate quantitative metrics, qualitative news drivers, and the final 6-month outlook. Use bullet points for metrics and scenarios to enhance readability.
+  agent: Market_Research_Analyst
+
+Quantitative_Defensive_Stock_Filtering:
+  description: >
+    Your mission is to perform a rigorous **Quantitative Stock Filtering** analysis tailored to the client's profile. You must utilize the **Research Brief** (sectors and sentiment) to identify a concentrated list of high-quality candidates.
+
+    **CRITICAL ADAPTATION:** The filtering criteria must be dynamically set based on the client's **'primary_goal_type'** and **'verified_risk_tolerance_score'** (from the Client Profile JSON):
+    
+    * **If Goal is 'Aggressive Wealth Accumulation' (Growth Focus):** Prioritize **Revenue Growth**, **Market Position**, and **high FCF**. A higher Beta (> 1.0) is acceptable and desired.
+    * **If Goal is 'Capital Preservation' (Defensive Focus):** Prioritize **Low Volatility (Beta < 1.0)**, **Dividend Stability (5+ years growth)**, and **D/E Ratio below Sector Average**.
+    
+    You must apply the appropriate quantitative criteria to identify 5-7 candidates.
+  expected_output: >
+    A final, comprehensive **Markdown table** listing the $\mathbf{5}\mathbf{-}\mathbf{7}$ **Best-Qualified Stock Candidates** from the analyzed sectors. The table must include the following mandatory columns for each candidate:
+    
+    | Ticker | stock name|Sector | Beta | FCF Trend (3Y) | D/E vs Sector Avg | Dividend Growth (Yrs) | P/E Ratio | Justification |
+    | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |:--- |
+    
+    The **Justification** column must concisely state how the candidate satisfies the criteria **aligned with the client's specific goal (Growth or Defense)**.
+  agent: Financial_Data_Analyst
+  context:
+    - market_research_task
+
+Qualitative_and_External_Risk_Assessment:
+  description: >
+    Your mission is to execute a rigorous **Qualitative and External Risk Vetting** on the final list of 5-7 quantitatively stable stock candidates provided in the **Markdown table** from the Financial Data Analyst. You must use your specialized tools to transform a quantitatively sound list into a truly **risk-vetted final portfolio**.
+
+    Your analysis must cover the following critical non-quantitative risk domains for *every* stock candidate:
+
+    1.  **Idiosyncratic Risks (SEC Hercules & Search Tool):**
+        * Investigate the candidate's name and ticker for pending or recent litigation, major product recalls, and material ethical/governance scandals over the last $\mathbf{12}$ **months**.
+        * Utilize the **SEC Hercules Tool** with keywords like 'litigation', 'recall', or 'scandal' to check formal risk disclosures in recent 10-K/8-K filings.
+
+    2.  **Supply Chain & Geopolitical Vulnerability (Search Tool):**
+        * Assess significant dependencies or risks related to raw material cost fluctuations, exposure to tariffs, or major supply chain vulnerabilities stemming from **geopolitical instability** (e.g., specific regions, trade wars).
+
+    3.  **Regulatory Headwinds (Search Tool):**
+        * Identify upcoming or recent changes in key sector legislation, commodity tariffs, or tax policy that could materially and negatively impact the candidate's future earnings or market access.
+  expected_output: >
+    A final, comprehensive **Markdown table** suitable for the Investment Strategist. This table must be a direct revision of the Financial Data Analyst's input table, incorporating all original quantitative columns PLUS the following two new columns for each stock:
+
+    | ...[Original Columns]... | Major Qualitative Risks | Final Risk Suitability Score (1-10) |
+    | :--- | :--- | :--- |
+
+    **Constraint:**
+    * **Major Qualitative Risks:** Must contain a brief, actionable summary of the most significant finding (e.g., 'Pending antitrust litigation' or 'High dependency on unstable region'), or simply state 'None' if no material risks are found.
+    * **Final Risk Suitability Score:** A single number from $\mathbf{1}$ to $\mathbf{10}$, where $\mathbf{10}$ represents the **Lowest Qualitative Risk** (Highly Suitable) and $\mathbf{1}$ represents **Unsuitable** (High Qualitative Risk).
+  agent: Risk_Management_Specialist
+  context:
+    - market_research_task
+
+
+Portfolio_Allocation_Task:
+  description: >
+    Your mission is to construct the **Final Portfolio Allocation Plan**. You must synthesize the data from all preceding stages:
+    1.  **Client Profile JSON:** To understand the client's financial constraints, risk tolerance, goal type, and timeline.
+    2.  **Market Research Brief:** To confirm the current market outlook and the rationale for sector selection.
+    3.  **Risk Vetting Table (Input Context):** To see the final list of 3-7 quantitatively and qualitatively approved stock candidates.
+
+    Allocate the client's **full available investment capital** (from the Client Profile JSON) among the stocks listed in the risk-vetted input table.
+
+    **Your specific process must include:**
+
+    1.  **Goal-Based Weighting (Dynamic):** Design the allocation weights (%) based directly on the client's **'verified_risk_tolerance_score'** and **'primary_goal_type'**.
+        * **For Growth Goals:** Strongly favor candidates/sectors with **BULLISH** sentiment and potential high returns, even if they have moderate-to-high volatility.
+        * **For Preservation Goals:** Strongly favor candidates with the highest **'Risk Suitability Score (1-10)'** and lowest Beta.
+    2.  **Sector Compliance & Diversification:** Ensure the final selection and weights are diversified. If the client specified a sector or asset preference (e.g., in the `strategy_preference` like "ETFs"), ensure the allocation includes a strategic weight for those preferences.
+    3.  **Final Calculation:** Calculate the exact **Investment Amount ($)** for each stock based on the allocated percentage and the client's total capital.
+  expected_output: >
+    A complete **Final Portfolio Allocation Plan** formatted clearly in Markdown. The output must consist of two mandatory parts:
+    # ... (rest of expected_output remains the same)
+  agent: Investment_Strategist
+  context:
+    - Qualitative_and_External_Risk_Assessment
+    - Quantitative_Defensive_Stock_Filtering
+    - market_research_task
+
+
+Final_Report_Task:
+  description: >
+    Your mission is to act as the final **Report Generator**, converting the structured data from the **Portfolio Allocation Plan** (provided in the preceding task) into a polished, professional, and client-ready **Investment Recommendation Report**.
+    This report must effectively synthesize the client's initial goals, the **specific investment methodology applied (Growth or Defensive)**, and the final strategic allocation into a coherent, persuasive narrative. Your document must maintain a tone that is **highly professional, trustworthy, analytical, and completely non-promotional**.
+    Your report must adhere strictly to the following structure and content requirements, drawing context from the entire chain of analysis (Client Profile, Market Brief, Risk Vetting, and Allocation):
+
+    1.  **Executive Summary:** A concise opening statement that addresses the client directly, confirming the primary investment goal, the total capital allocated, and the strategic objective of the recommended portfolio (e.g., Aggressive Capital Appreciation with Technology Focus, OR Capital Preservation with Income Focus).
+    2.  **Strategic Rationale & Methodology:** Justify the **specific approach (Growth or Defensive)** chosen. Clearly link the client's **verified risk tolerance and timeline** to the filtering and allocation criteria used. This section must explain *why* this strategy is the optimal fit for their **timeline and goal type**.
+    3.  **Portfolio Recommendation:** Re-present the final **Allocation Table** from the preceding task (including Ticker, Weight, and Investment Amount) under a clear heading.
+    4.  **Security Justifications (Deep Dive):** For *every* stock/ETF in the portfolio, provide a focused **2-3 sentence justification**. This justification must reference its verified quantitative strength and its **Risk Suitability Score**, explaining its specific role in the portfolio (e.g., 'Core growth driver' or 'Defensive income anchor').
+  expected_output: >
+    A full, complete, and persuasive **Investment Recommendation Report** in clear Markdown format. The report must use distinct, numbered or bolded headings for the four mandatory sections described above and be ready for immediate delivery to the client. DO NOT include any internal commentary, prose, or introductions outside of the report content itself.
+  agent: Final_Report_Generator
+  context:
+    - Portfolio_Allocation_Task
+
