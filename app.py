@@ -22,15 +22,11 @@ except ImportError as e:
 # We replicate your main.py setup here for demonstration.
 # Ensure your API keys are actually loaded from .env or set here.
 
-with st.sidebar:
-    st.title("🔑 API Key Configuration")
-    st.markdown("Ensure your API keys are set correctly. For security, avoid hardcoding sensitive keys in production.")
-    openai_key = st.text_input("OpenAI API Key", type="password")
-    av_key = st.text_input("Alpha Vantage API Key", type="password")
-    google_key = st.text_input("Google API Key", type="password")
-os.environ["OPENAI_API_KEY"] = openai_key
-os.environ["AV_API_KEY"] = av_key
-os.environ["GOOGLE_API_KEY"] = google_key
+
+
+os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
+os.environ["AV_API_KEY"] = os.getenv("AV_API_KEY")
+os.environ["GOOGLE_API_KEY"] = os.getenv("GOOGLE_API_KEY")
 
 st.set_page_config(
     page_title="Dynamic Financial Strategy Generator",
