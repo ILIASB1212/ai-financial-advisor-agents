@@ -21,9 +21,26 @@ except ImportError as e:
 # Note: In a real app, use st.secrets or a more secure method. 
 # We replicate your main.py setup here for demonstration.
 # Ensure your API keys are actually loaded from .env or set here.
+# for streamlit deployment you can set them in the secrets section
+def load_secrets():
+    """Loads API keys from Streamlit secrets into the os.environ for CrewAI/litellm compatibility."""
+    
+    required_keys = ["OPENAI_API_KEY", "AV_API_KEY", "GOOGLE_API_KEY"]
+    
+    # CRITICAL FIX: Load keys from st.secrets if running on Streamlit Cloud
+    for key in required_keys:
+        if key in st.secrets:
+            os.environ[key] = st.secrets[key]
+        elif not os.getenv(key):
+            # If not in secrets and not in local OS environment, show error.
+            st.warning(f"⚠️ Warning: {key} is missing. Crew execution may fail.")
 
+# Load the keys immediately at app startup
+load_secrets()
 
-
+# FOR LOCAL FILES OS ENVIRONMENT VARIABLES
+from dotenv import load_dotenv
+load_dotenv()  # Load environment variables from a .env file if present
 os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 os.environ["AV_API_KEY"] = os.getenv("AV_API_KEY")
 os.environ["GOOGLE_API_KEY"] = os.getenv("GOOGLE_API_KEY")
