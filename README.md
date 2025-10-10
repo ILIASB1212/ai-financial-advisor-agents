@@ -1,4 +1,4 @@
-### 💰 Dynamic Finance Crew: Investment Strategy Generator
+# 💰 Dynamic Finance Crew: Investment Strategy Generator
 Welcome to the Dynamic Finance Crew project, a multi-agent system built with CrewAI designed to generate customized investment strategies based on dynamic client profiles (Growth, Defensive, Long-Term, Short-Term).
 
 This project successfully transitioned from a rigid, static model to a dynamic, goal-aligned engine by creating specialized agents and integrating external data APIs.
@@ -15,12 +15,12 @@ Dynamic Client Profiling: The system adapts its filtering criteria (Beta, FCF, R
 ## 🛠️ Project Setup & Installation
 This project uses Python >=3.10 and requires external libraries and API keys to run effectively.
 
-# 1. Install Dependencies
+### 1. Install Dependencies
 Navigate to your project root and install the required packages:
 
 pip install crewai crewai-tools pandas yfinance google-api-python-client python-dotenv streamlit
 
-# 2. API Key Configuration (Crucial)
+### 2. API Key Configuration (Crucial)
 Your agents rely on external services. You MUST define these keys securely.
 
 Key Name
