@@ -18,16 +18,11 @@ except ImportError as e:
     st.stop()
 
 # --- 2. ENVIRONMENT AND CONFIGURATION ---
-# Note: In a real app, use st.secrets or a more secure method. 
-# We replicate your main.py setup here for demonstration.
-# Ensure your API keys are actually loaded from .env or set here.
 # for streamlit deployment you can set them in the secrets section
 def load_secrets():
     """Loads API keys from Streamlit secrets into the os.environ for CrewAI/litellm compatibility."""
     
-    required_keys = ["OPENAI_API_KEY", "AV_API_KEY", "GOOGLE_API_KEY"]
-    
-    # CRITICAL FIX: Load keys from st.secrets if running on Streamlit Cloud
+    required_keys = ["OPENAI_API_KEY", "AV_API_KEY", "GOOGLE_API_KEY","SERPER_API_KEY"]
     for key in required_keys:
         if key in st.secrets:
             os.environ[key] = st.secrets[key]
@@ -40,7 +35,7 @@ load_secrets()
 
 # FOR LOCAL FILES OS ENVIRONMENT VARIABLES
 from dotenv import load_dotenv
-load_dotenv()  # Load environment variables from a .env file if present
+load_dotenv() 
 os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 os.environ["AV_API_KEY"] = os.getenv("AV_API_KEY")
 os.environ["GOOGLE_API_KEY"] = os.getenv("GOOGLE_API_KEY")
@@ -56,7 +51,7 @@ st.set_page_config(
 def run_financial_crew(capital: int, timeline: int, risk: int, preferences: str,investement_strategy:str):
     """Formats the prompt and executes the CrewAI workflow."""
     
-    # Dynamically build the prompt based on user inputs
+    
     prompt = f"""
     the capital that I want to invest {capital:,.0f} dollars using {investement_strategy}. 
     My primary investment goal is for the next {timeline} years. 
@@ -97,7 +92,7 @@ with st.form("client_intake_form"):
             "Initial Capital ($USD)", 
             min_value=10000, 
             max_value=10000000, 
-            value=1000000, # Default to $1M from the user's last request
+            value=1000000,
             step=100000,
             format="%d",
             help="Total amount of capital to be strategically allocated."
@@ -107,7 +102,7 @@ with st.form("client_intake_form"):
             "Investment Timeline (Years)", 
             min_value=1, 
             max_value=30, 
-            value=15, # Default to 15 years
+            value=15, # years
             step=1,
             help="The client's long-term horizon for this investment."
         )
@@ -117,7 +112,7 @@ with st.form("client_intake_form"):
             "Verified Risk Tolerance Score (1=Low, 10=High)", 
             min_value=1, 
             max_value=10, 
-            value=7, # Default to 7 (Moderate to High)
+            value=7, 
             step=1,
             help="The dynamic risk score used by the agents to determine strategy (Growth vs. Preservation)."
         )
@@ -135,7 +130,7 @@ with st.form("client_intake_form"):
             help="Choose the investment strategy that best fits your goals."
         )
 
-    # Submission Button
+    
     submitted = st.form_submit_button("Generate Investment Strategy (Run Crew)")
 
 # --- 5. RESULTS DISPLAY ---
