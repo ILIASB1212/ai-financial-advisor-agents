@@ -120,10 +120,11 @@ Final_Report_Task:
     1.  **Executive Summary:** A concise opening statement that addresses the client directly, confirming the primary investment goal, the total capital allocated, and the strategic objective of the recommended portfolio (e.g., Aggressive Capital Appreciation with Technology Focus, OR Capital Preservation with Income Focus).
     2.  **Strategic Rationale & Methodology:** Justify the **specific approach (Growth or Defensive)** chosen. Clearly link the client's **verified risk tolerance and timeline** to the filtering and allocation criteria used. This section must explain *why* this strategy is the optimal fit for their **timeline and goal type**.
     3.  **Portfolio Recommendation:** Re-present the final **Allocation Table** from the preceding task (including Ticker, Weight, and Investment Amount) under a clear heading.
-    4.  **Security Justifications (Deep Dive):** For *every* stock/ETF in the portfolio, provide a focused **2-3 sentence justification**. This justification must reference its verified quantitative strength and its **Risk Suitability Score**, explaining its specific role in the portfolio (e.g., 'Core growth driver' or 'Defensive income anchor').
+    4.  **Security Justifications (Deep Dive):** For *every* stock/ETF in the portfolio, provide a focused **small report for  justification**. This justification must reference its verified quantitative strength and its **Risk Suitability Score**, explaining its specific role in the portfolio (e.g., 'Core growth driver' or 'Defensive income anchor').
   expected_output: >
-    A full, complete, and persuasive **Investment Recommendation Report** in clear Markdown format. The report must use distinct, numbered or bolded headings for the four mandatory sections described above and be ready for immediate delivery to the client. DO NOT include any internal commentary, prose, or introductions outside of the report content itself.
+    A full, complete, and persuasive **Investment Recommendation Report** in clear Markdown format. The report must use distinct, numbered or bolded headings for the four mandatory sections described above and be ready for immediate delivery to the client. DO NOT include any internal commentary, prose, or introductions outside of the report content itself,only report notan email.
   agent: Final_Report_Generator
   context:
+    - client_profile_task
     - Portfolio_Allocation_Task
 
