@@ -22,13 +22,21 @@ except ImportError as e:
 def load_secrets():
     """Loads API keys from Streamlit secrets into the os.environ for CrewAI/litellm compatibility."""
     
-    required_keys = ["OPENAI_API_KEY", "AV_API_KEY", "GOOGLE_API_KEY","SERPER_API_KEY"]
+    # Add CHROMA_OPENAI_API_KEY to the required keys list
+    required_keys = ["OPENAI_API_KEY", "AV_API_KEY", "GOOGLE_API_KEY", "SERPER_API_KEY"] 
+    
     for key in required_keys:
         if key in st.secrets:
+            # Set the key from Streamlit secrets
             os.environ[key] = st.secrets[key]
         elif not os.getenv(key):
-            # If not in secrets and not in local OS environment, show error.
             st.warning(f"⚠️ Warning: {key} is missing. Crew execution may fail.")
+
+    # CRITICAL FIX: Ensure CHROMA_OPENAI_API_KEY is set to the same value
+    if os.environ.get("OPENAI_API_KEY"):
+        os.environ["CHROMA_OPENAI_API_KEY"] = os.environ["OPENAI_API_KEY"] # <--- ADD THIS LINE
+    else:
+        st.warning("⚠️ Warning: CHROMA_OPENAI_API_KEY is not set.")
 
 # Load the keys immediately at app startup
 load_secrets()
