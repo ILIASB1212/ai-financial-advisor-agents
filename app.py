@@ -133,7 +133,7 @@ with st.form("client_intake_form"):
         )
         investement_strategy=st.selectbox(
             "Investment Strategy",
-            options=["Dolar Cost Averging","Growth Investing","Value Investing","Income Investing","Index Investing","Socially Responsible Investing"],
+            options=["Dolar Cost Averging","Growth Investing"],
             index=0,
             help="Choose the investment strategy that best fits your goals."
         )
