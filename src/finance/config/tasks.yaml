@@ -91,21 +91,7 @@ Quantitative_Defensive_Stock_Filtering:
     **CRITICAL ADAPTATION:** The filtering criteria must be dynamically set based on the client's **'primary_goal_type'** 
     and **'verified_risk_tolerance_score'** (from the Client Profile JSON):
     
-    * **If Goal is 'Aggressive Wealth Accumulation' (Growth Focus):** 
-      - Prioritize **Revenue Growth Rate > 15% annually**
-      - **Market Position** (Top 3 in sector)
-      - **High Free Cash Flow** (FCF growth > 10% over 3 years)
-      - Beta > 1.0 is acceptable and desired
-      - P/E ratio can be elevated if justified by growth
-    
-    * **If Goal is 'Capital Preservation' (Defensive Focus):** 
-      - Prioritize **Low Volatility (Beta < 1.0)**
-      - **Dividend Stability** (5+ consecutive years of growth)
-      - **D/E Ratio below Sector Average**
-      - Consistent positive FCF
-      - Moderate P/E ratios
-    
-    You must apply the appropriate quantitative criteria to identify **5-7 candidates** from the researched sectors.
+    You must apply the appropriate quantitative criteria to identify **number of  candidates base on clients budget** from the researched sectors.
     
     **Data Sources:** Use your financial tools to gather:
     - Current stock prices
