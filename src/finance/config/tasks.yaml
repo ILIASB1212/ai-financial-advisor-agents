@@ -14,7 +14,7 @@ client_profile_task:
       "client_budget": "string (e.g., '$100,000')",
       "timeline_in_years": "integer (e.g., 5)",
       "verified_risk_tolerance_score": "integer (1-10 scale)",
-      "sector_preferences": "array of strings (e.g., ['Technology', '..........'])",
+      "sector_preferences": "array of strings (e.g., ['Sectore 1', 'Sectore 2',.........])",
       "investment_strategy": "string (e.g., 'Growth Investing')",
     }
     ```
@@ -122,7 +122,7 @@ Quantitative_Defensive_Stock_Filtering:
     
     | Ticker | Stock Name | Sector | Beta | FCF Trend (3Y) | D/E vs Sector Avg | Dividend Growth (Yrs) | P/E Ratio | Quantitative Justification |
     | :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :--- |
-    | AAPL | Apple Inc. | Technology | 1.15 | +12% | Below | 10 | 28.5 | Strong FCF growth, market leader, consistent dividend |
+    | AAPL | company name. | Sectore | float | percentage | Below | int | float | Strong FCF growth, market leader, consistent dividend |
     
     **The Quantitative Justification column must:**
     - Be 1-2 sentences
