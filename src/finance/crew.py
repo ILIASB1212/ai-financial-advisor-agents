@@ -55,7 +55,7 @@ class Finance():
         return Agent(
             config=self.agents_config['Risk_Management_Specialist'], 
             verbose=True,
-            tools=[sec_hercules_tool_function,google_search_tool_function,StockRetriverSchemaTool()],
+            tools=[sec_hercules_tool_function,google_search_tool_function,StockRetriverSchemaTool(),financial_scraper_tool_function],
             memory=True
         )
     @agent
