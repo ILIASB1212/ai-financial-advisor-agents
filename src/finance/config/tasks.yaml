@@ -13,12 +13,9 @@ client_profile_task:
     {
       "client_budget": "string (e.g., '$100,000')",
       "timeline_in_years": "integer (e.g., 5)",
-      "risk_tolerance": "string (Low/Medium/High)",
       "verified_risk_tolerance_score": "integer (1-10 scale)",
-      "sector_preferences": "array of strings (e.g., ['Technology', 'Healthcare'])",
+      "sector_preferences": "array of strings (e.g., ['Technology', '..........'])",
       "investment_strategy": "string (e.g., 'Growth Investing')",
-      "primary_goal_type": "string (e.g., 'Aggressive Wealth Accumulation')",
-      "implicit_constraints": "string (any special requirements)"
     }
     ```
     
@@ -39,7 +36,7 @@ market_research_task:
 
     1.  **Sector Identification and Justification:**
         * **Primary Filter:** Scrutinize the goal type (e.g., 'Aggressive Wealth Accumulation', 'Dividend Stock Focus') 
-          and sector preferences. Identify and select the **2-3 most relevant GICS sectors**.
+          and sector preferences. Identify and select the most relevant GICS sectors**.
         * **Risk-Based Fallback:** If sector preference is ambiguous, use the **verified_risk_tolerance_score** and 
           timeline_years to justify the selection. (e.g., High Risk/Long Timeline = Growth Sectors; Low Risk/Short Timeline = 
           Defensive/Value Sectors). **The justification for sector choice must be explicit in your notes.**
@@ -65,8 +62,8 @@ market_research_task:
     
     ## 1. Client-Sector Alignment Summary
     
-    A concise opening paragraph (3-5 sentences) that:
-    - Clearly states the 2-3 chosen sectors
+    A concise opening paragraph (4-6 sentences) that:
+    - Clearly states the chosen sectors
     - Explicitly justifies the selection based on the client's profile data
     - Provides the overall weighted market sentiment (BULLISH/BEARISH/NEUTRAL) across all selected sectors
     
